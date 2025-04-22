@@ -6,6 +6,7 @@ vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
+vim.o.termguicolors = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -103,6 +104,10 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Shortcuts to move across buffers
+vim.keymap.set('n', '<S-l>', ':bn<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<S-h>', ':bp<CR>', { noremap = true, silent = true })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -554,6 +559,7 @@ require('lazy').setup({
         },
       }
 
+      require('lspconfig').jedi_language_server.setup {}
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -620,7 +626,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -756,15 +762,26 @@ require('lazy').setup({
     -- change the command in the config to whatever the name of that colorscheme is.
     --
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
+    -- 'folke/tokyonight.nvim',
     -- 'RRethy/base16-nvim',
+    -- 'wincent/base16-nvim',
+    -- 'kepano/flexoki-neovim',
+    -- 'jacoborus/tender',
+    -- 'rebelot/kanagawa.nvim',
+    -- 'savq/melange-nvim',
+    'vague2k/vague.nvim',
+    -- 'ribru17/bamboo.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
+    -- config for bamboo thme
+    -- config = function()
+    --   require('bamboo').setup {
+    --     -- write your config here
+    --     style = 'vulgaris',
+    --   }
+    -- end,
     init = function()
       -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-
-      vim.cmd.colorscheme 'tokyonight'
+      vim.cmd.colorscheme 'vague'
 
       -- You can configure highlights by doing something like:
       -- vim.cmd.hi 'Comment gui=none'
@@ -879,7 +896,31 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
+  { -- a plugin to interact with jupyter-notebook in neovim
+    'dccsillag/magma-nvim,',
+    version = '*',
+    run = 'UpdateRemotePlugins',
+    keys = {
+      { '<leader>mi', '<cmd>MagmaInit<CR>', desc = 'This command initializes a runtime for the current buffer' },
+      { '<leader>mo', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Evaluate the text given by some operator.' },
+      { '<leader>ml', '<cmd>MagmaEvaluateLine<CR>', desc = 'Evaluate the current line' },
+      { '<leader>ml', '<cmd>EvaluateVisual<CR>', desc = 'Evaluate the selected text' },
+    },
+  },
 })
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- Hide warning and Errors text
+vim.diagnostic.config {
+  virtual_text = false, -- Disable virtual text for all diagnostics
+  signs = true, -- Enable diagnostic signs in the line number bar
+  underline = false, -- Disable underlining for diagnostics
+  update_in_insert = false, -- Update diagnostics only in Normal mode
+}
+
+-- Show Error and Warning messages with a command
+vim.api.nvim_create_user_command('ShowDiagnostics', function()
+  -- Open the diagnostics in a floating window at the current cursor position
+  vim.diagnostic.open_float(nil, { focusable = false })
+end, {})
+
+vim.api.nvim_set_keymap('n', '<leader>di', ':ShowDiagnostics<CR>', { noremap = true, silent = true })
