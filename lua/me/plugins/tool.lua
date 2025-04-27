@@ -7,6 +7,12 @@ return {
     -- jupyter notebook plugin
     'kiyoon/jupynium.nvim',
     build = 'uv pip install . --python=$HOME/.local/share/virtualenv/jupynium/bin/python',
+    config = function()
+      require('jupynium').setup {
+        python_host = '$HOME/.local/share/virtualenv/jupynium/bin/python',
+        default_notebook_URL = 'localhost:8888',
+      }
+    end,
   },
   'rcarriga/nvim-notify', -- optional
   'stevearc/dressing.nvim', -- optional, UI for :JupyniumKernelSelect
