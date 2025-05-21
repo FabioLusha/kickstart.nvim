@@ -146,12 +146,11 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy update
 --
 
--- Declaring the plugins in the separate dierctories
+-- Declaring the plugins in the separate directories
+-- The plugins are loaded at the end of 'lazy' setup
 local lazy_plugins = require 'me.plugins'
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- Load my plugins
-  lazy_plugins,
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
@@ -563,8 +562,8 @@ require('lazy').setup({
           },
         },
       }
-
-      require('lspconfig').jedi_language_server.setup {}
+      require('lspconfig').ruff.setup {}
+      require('lspconfig').pyright.setup {}
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -881,6 +880,8 @@ require('lazy').setup({
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
+  -- Load my plugins
+  lazy_plugins,
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -901,17 +902,6 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
-  { -- a plugin to interact with jupyter-notebook in neovim
-    'dccsillag/magma-nvim,',
-    version = '*',
-    run = 'UpdateRemotePlugins',
-    keys = {
-      { '<leader>mi', '<cmd>MagmaInit<CR>', desc = 'This command initializes a runtime for the current buffer' },
-      { '<leader>mo', '<cmd>MagmaEvaluateOperator<CR>', desc = 'Evaluate the text given by some operator.' },
-      { '<leader>ml', '<cmd>MagmaEvaluateLine<CR>', desc = 'Evaluate the current line' },
-      { '<leader>ml', '<cmd>EvaluateVisual<CR>', desc = 'Evaluate the selected text' },
-    },
-  },
 })
 
 -- Hide warning and Errors text
@@ -929,3 +919,6 @@ vim.api.nvim_create_user_command('ShowDiagnostics', function()
 end, {})
 
 vim.api.nvim_set_keymap('n', '<leader>di', ':ShowDiagnostics<CR>', { noremap = true, silent = true })
+
+-- custom options
+require 'me.keymaps'
