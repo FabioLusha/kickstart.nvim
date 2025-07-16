@@ -15,8 +15,6 @@ vim.o.termguicolors = true
 
 -- Make line numbers default
 vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -72,6 +70,29 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Disable touchpad when entering Vim or gaining Focus (on GENOME)
+if vim.fn.executable 'gsettings' == 1 then
+  local function touchpad(mode)
+    vim.fn.jobstart {
+      'gsettings',
+      'set',
+      'org.gnome.desktop.peripherals.touchpad',
+      'send-events',
+      mode,
+    }
+  end
+  vim.api.nvim_create_autocmd({ 'VimEnter', 'FocusGained' }, {
+    callback = function()
+      touchpad 'disabled'
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({ 'VimLeavePre', 'FocusLost' }, {
+    callback = function()
+      touchpad 'enabled'
+    end,
+  })
+end
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -146,8 +167,8 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy update
 --
 
--- Declaring the plugins in the separate directories
--- The plugins are loaded at the end of 'lazy' setup
+-- Declaring new plugins in a separate directories.
+-- These plugins are loaded at the end of 'lazy' setup
 local lazy_plugins = require 'me.plugins'
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
