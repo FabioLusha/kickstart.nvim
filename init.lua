@@ -363,7 +363,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
-      vim.keymap.set('n', '<leader>/', function()
+      vim.keymap.set('n', '<leader>ff', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
           winblend = 10,
@@ -465,6 +465,10 @@ require('lazy').setup({
           --  To jump back, press <C-t>.
           map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
+          -- WARN: This is not Goto Definition, this is Goto Declaration.
+          --  For example, in C this would take you to the header.
+          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
           -- Find references for the word under your cursor.
           map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
@@ -481,6 +485,10 @@ require('lazy').setup({
           --  Symbols are things like variables, functions, types, etc.
           map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
 
+          map('<leader>df', function()
+            require('telescope.builtin').lsp_document_symbols { symbols = { 'Function', 'Method' } }
+          end, '[D]ocument [F]unctions')
+
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
           map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
@@ -492,10 +500,6 @@ require('lazy').setup({
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
-
-          -- WARN: This is not Goto Definition, this is Goto Declaration.
-          --  For example, in C this would take you to the header.
-          map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
