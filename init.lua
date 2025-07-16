@@ -561,7 +561,6 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -572,6 +571,14 @@ require('lazy').setup({
         -- ts_ls = {},
         --
 
+        -- pyright = {
+        --   on_attach = function(client, bufnr)
+        --     -- disable the server’s formatting capability
+        --     client.server_capabilities.documentFormattingProvider = false
+        --     client.server_capabilities.documentRangeFormattingProvider = false
+        --   end,
+        -- },
+        ruff = {},
         lua_ls = {
           -- cmd = {...},
           -- filetypes = { ...},
@@ -587,8 +594,6 @@ require('lazy').setup({
           },
         },
       }
-      require('lspconfig').ruff.setup {}
-      require('lspconfig').pyright.setup {}
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -640,7 +645,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, python = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
