@@ -593,6 +593,9 @@ require('lazy').setup({
           },
         },
       }
+
+      -- TODO: move lsp defintion to lua/me/lsp directory
+      servers = vim.list_extend(servers, require 'me.lsp.servers')
       -- Ensure the servers and tools above are installed
       --  To check the current status of installed tools and/or manually install
       --  other tools, you can run
@@ -917,7 +920,6 @@ require('lazy').setup({
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
   -- Load my plugins
-  lazy_plugins,
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
