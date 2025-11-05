@@ -16,6 +16,7 @@ vim.o.termguicolors = true
 -- Make line numbers default
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.o.wrap = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -165,11 +166,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 --  To update plugins you can run
 --    :Lazy update
---
 
--- Declaring new plugins in a separate directories.
--- These plugins are loaded at the end of 'lazy' setup
-local lazy_plugins = require 'me.plugins'
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -197,6 +194,8 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      signs_staged_enable = true,
+      signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
     },
   },
 
@@ -631,12 +630,12 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>cf',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
         mode = '',
-        desc = '[F]ormat buffer',
+        desc = '[C]ode [F]ormat buffer',
       },
     },
     opts = {
@@ -660,10 +659,17 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'isort', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        python = {
+          -- To fix-auto fixable lint errors
+          'ruff_fix',
+          -- To run the Ruff formatter
+          'ruff_format',
+          -- To organize the imports
+          'ruff_organize_imports',
+        },
       },
     },
   },
@@ -736,7 +742,7 @@ require('lazy').setup({
           --  This will auto-import if your LSP supports it.
           --  This will expand snippets if the LSP sent a snippet.
           -- ['<C-leader>'] = cmp.mapping.confirm { select = true },
-          ['<C-Space>'] = cmp.mapping(function()
+          ['<C-y>'] = cmp.mapping(function()
             if cmp.visible() then
               cmp.confirm { select = true }
             else
@@ -900,10 +906,10 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  -- here are my plugins
+  require 'me.plugins',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
