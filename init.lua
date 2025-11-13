@@ -72,28 +72,28 @@ vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 
 -- Disable touchpad when entering Vim or gaining Focus (on GENOME)
-if vim.fn.executable 'gsettings' == 1 then
-  local function touchpad(mode)
-    vim.fn.jobstart {
-      'gsettings',
-      'set',
-      'org.gnome.desktop.peripherals.touchpad',
-      'send-events',
-      mode,
-    }
-  end
-  vim.api.nvim_create_autocmd({ 'VimEnter', 'FocusGained' }, {
-    callback = function()
-      touchpad 'disabled'
-    end,
-  })
-
-  vim.api.nvim_create_autocmd({ 'VimLeavePre', 'FocusLost' }, {
-    callback = function()
-      touchpad 'enabled'
-    end,
-  })
-end
+-- if vim.fn.executable 'gsettings' == 1 then
+--   local function touchpad(mode)
+--     vim.fn.jobstart {
+--       'gsettings',
+--       'set',
+--       'org.gnome.desktop.peripherals.touchpad',
+--       'send-events',
+--       mode,
+--     }
+--   end
+--   vim.api.nvim_create_autocmd({ 'VimEnter', 'FocusGained' }, {
+--     callback = function()
+--       touchpad 'disabled'
+--     end,
+--   })
+--
+--   vim.api.nvim_create_autocmd({ 'VimLeavePre', 'FocusLost' }, {
+--     callback = function()
+--       touchpad 'enabled'
+--     end,
+--   })
+-- end
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
