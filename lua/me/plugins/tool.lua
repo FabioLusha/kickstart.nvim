@@ -6,10 +6,17 @@ return {
   {
     -- jupyter notebook plugin
     'kiyoon/jupynium.nvim',
-    build = 'uv pip install . --python=' .. os.getenv 'HOME' .. '/.local/share/virtualenv/jupynium/bin/python',
+    build = function(plugin)
+      local venv_path = vim.fn.expand '$HOME/.local/share/virtualenv/jupynium'
+      local python_exec = venv_path .. '/bin/python'
+      -- create the venv if it does not exist
+      vim.fn.system { 'uv', 'venv', venv_path, '--seed' }
+      -- install jupynium for the venv
+      vim.fn.system { 'uv', 'pip', 'install', plugin.dir, '--python', python_exec }
+    end,
     opts = {
-      python_host = os.getenv 'HOME' .. '.local/share/virtualenv/jupynium/bin/python',
-      default_notebook_URL = 'localhost:8888',
+      python_host = os.getenv 'HOME' .. '/.local/share/virtualenv/jupynium/bin/python',
+      default_notebook_URL = 'localhost:8888/nbclassic',
     },
   },
   { 'rcarriga/nvim-notify' }, -- optional
@@ -44,7 +51,6 @@ return {
   },
   -- Typst config
   {
-
     'chomosuke/typst-preview.nvim',
     lazy = false, -- or ft = 'typst'
     version = '1.*',
