@@ -781,8 +781,10 @@ require('lazy').setup({
     -- 'jacoborus/tender',
     -- 'rebelot/kanagawa.nvim',
     -- 'savq/melange-nvim',
-    'vague2k/vague.nvim',
+    -- 'vague2k/vague.nvim',
     -- 'ribru17/bamboo.nvim',
+    -- 'oskarnurm/koda.nvim',
+    'thesimonho/kanagawa-paper.nvim',
     priority = 1000, -- Make sure to load this before all the other start plugins.
     -- config for bamboo thme
     -- config = function()
@@ -793,7 +795,7 @@ require('lazy').setup({
     -- end,
     init = function()
       -- Load the colorscheme here.
-      vim.cmd.colorscheme 'vague'
+      vim.cmd.colorscheme 'kanagawa-paper' -- 'vague'
 
       -- You can configure highlights by doing something like:
       -- vim.cmd.hi 'Comment gui=none'
