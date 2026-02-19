@@ -17,7 +17,26 @@ return {
   --     client.server_capabilities.documentRangeFormattingProvider = false
   --   end,
   -- },
-  ruff = {},
+  --
+  -- ty: A python lsp from astral
+  ty = {
+    init_options = {
+      settings = {},
+    },
+    on_attach = function(client, bufnr)
+      -- disable the server’s formatting capability in favor of ruff
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end,
+  },
+  -- Ruff: A python formatter and linter
+  ruff = {
+    init_options = {
+      settings = {
+        loglevel = 'info',
+      },
+    },
+  },
 
   lua_ls = {
     -- cmd = {...},
