@@ -3,6 +3,7 @@
 -- here we return the list of plugins to be loaded with their spec
 
 return {
+  { "tpope/vim-surround" },
   {
     -- jupyter notebook plugin
     'kiyoon/jupynium.nvim',
@@ -16,7 +17,7 @@ return {
     end,
     opts = {
       python_host = os.getenv 'HOME' .. '/.local/share/virtualenv/jupynium/bin/python',
-      default_notebook_URL = 'localhost:8888/nbclassic',
+      default_notebook_URL = 'localhost:8888',
     },
   },
   { 'rcarriga/nvim-notify' }, -- optional
